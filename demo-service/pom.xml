@@ -15,5 +15,10 @@
   <url>http://maven.apache.org</url>
   
   <dependencies>
+  	<dependency>
+  		<groupId>com.wxyh</groupId>
+  		<artifactId>demo-dao</artifactId>
+  		<version>${parent.version}</version>
+  	</dependency>
   </dependencies>
 </project>
