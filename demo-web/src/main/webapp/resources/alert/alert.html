@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>Alert</title>
+  <script src="../js/jquery-3.2.0.min.js"></script>
+ </head>
+ <body>
+ 	<div id="seconds" style="font-size:22px;color:red;">3</div>
+ </body>
+ 
+ <script>
+ 	var second = 2;
+	var intervalid = setInterval("clock()", 1000);
+	function clock() {
+		if (second == 0) {
+			window.location.href = "https://www.baidu.com/";
+			clearInterval(intervalid);
+		}
+		$("#seconds").text(second--);
+	}
+ </script>
+</html>
