@@ -27,6 +27,7 @@
 	    <artifactId>ehcache-core</artifactId>
 	    <version>2.6.11</version>
 	</dependency>
+
   	
 	<dependency>
 	    <groupId>log4j</groupId>
@@ -54,7 +55,13 @@
 	    <artifactId>logback-core</artifactId>
 	    <version>1.2.1</version>
 	</dependency>
-  	
+
+	<dependency>
+		<groupId>org.quartz-scheduler</groupId>
+		<artifactId>quartz</artifactId>
+		<version>2.2.3</version>
+	</dependency>
+
 	<dependency>
 	    <groupId>commons-collections</groupId>
 	    <artifactId>commons-collections</artifactId>

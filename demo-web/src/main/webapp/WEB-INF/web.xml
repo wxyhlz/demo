@@ -35,7 +35,7 @@
   
   <context-param>
   	<param-name>contextConfigLocation</param-name>
-  	<param-value>classpath:applicationContext*.xml</param-value>
+  	<param-value>classpath:applicationContext*.xml,spring-task.xml</param-value>
   </context-param>
   
   <listener>
@@ -79,5 +79,12 @@
   <session-config>
   	<session-timeout>30</session-timeout>
   </session-config>
+  
+  <jsp-config>
+  	<taglib>
+  		<taglib-uri>http://com.wxyh.authTag</taglib-uri>
+  		<taglib-location>/WEB-INF/tld/authTag.tld</taglib-location>
+  	</taglib>
+  </jsp-config>
   
 </web-app>
