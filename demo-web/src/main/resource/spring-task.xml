@@ -20,6 +20,7 @@
  		<task:scheduled ref="jobExample4SpringTask2" method="execute" cron="0/20 * * * * ?"/>
  	</task:scheduled-tasks>
  	
+ 	<!-- spring+quartz定时任务配置 -->
  	<bean id="qzJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
  		<property name="targetObject" ref="jobExample4Quartz"/>
  		<property name="targetMethod" value="execute"/>
@@ -29,6 +30,7 @@
  		<property name="jobDetail" ref="qzJobDetail"/>
  		<property name="cronExpression" value="0/10 * * * * ?"/>
  	</bean>
+ 	
  	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
  		<!-- 延迟30s启动调度器 -->
  		<property name="startupDelay" value="10"/>
