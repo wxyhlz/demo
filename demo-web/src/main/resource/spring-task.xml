@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
     
-    <!-- 开启spring 定时任务和异步任务的注解配置功能。taskExecutor：执行异步任务的线程池，是一个ThreadPoolTaskExecutor类型的实例；
+    <!-- 开启spring定时任务和异步任务的注解配置功能。taskExecutor：执行异步任务的线程池，是一个ThreadPoolTaskExecutor类型的实例；
     	jobScheduler：定时任务调度器，是一个ThreadPoolTaskScheduler类型的实例，pool-size配置执行定时任务线程池的核心线程数。 -->
     <task:annotation-driven scheduler="jobScheduler" executor="taskExecutor"/>
     <task:scheduler id="jobScheduler" pool-size="5"/>
