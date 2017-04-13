@@ -18,7 +18,7 @@ public class JobExample4SpringTask {
 	
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
-	@Scheduled(cron = "0/10 * * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void execute() {
 		String now = sdf.format(new Date());
 		logger.error(now + ", JobExample4SpringTask, 执行批次=" + ai.incrementAndGet());
