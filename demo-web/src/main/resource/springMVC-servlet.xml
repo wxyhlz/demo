@@ -23,6 +23,20 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
     
+    <!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    
+    </bean> -->
+    
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    	<property name="exceptionMappings">
+    		<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    			<property name="fileEncoding" value="UTF-8"></property>
+    			<property name="location" value="classpath:config/exceptionMappings.properties"></property>
+    		</bean>
+    	</property>
+    	<!-- <property name="defaultErrorView" value="error/500"></property> -->
+    </bean>
+
     <mvc:interceptors>
     	<bean class="com.wxyh.demo.web.interceptors.MyInterceptor">
     		<property name="configProps">

@@ -3,12 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:context="http://www.springframework.org/schema/context" 
 	xmlns:task="http://www.springframework.org/schema/task" 
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-           	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-			http://www.springframework.org/schema/context
-         	http://www.springframework.org/schema/context/spring-context-3.0.xsd
-         	http://www.springframework.org/schema/task 
-         	http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
     
     <!-- 开启spring 定时任务和异步任务的注解配置功能。taskExecutor：执行异步任务的线程池，是一个ThreadPoolTaskExecutor类型的实例；
     	jobScheduler：定时任务调度器，是一个ThreadPoolTaskScheduler类型的实例，pool-size配置执行定时任务线程池的核心线程数。 -->
@@ -21,6 +19,7 @@
  		<task:scheduled ref="jobExample4SpringTask2" method="execute" cron="0/20 * * * * ?"/>
  	</task:scheduled-tasks>
  	
+ 	<!-- spring+quartz定时任务配置 -->
  	<bean id="qzJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
  		<property name="targetObject" ref="jobExample4Quartz"/>
  		<property name="targetMethod" value="execute"/>
@@ -30,8 +29,9 @@
  		<property name="jobDetail" ref="qzJobDetail"/>
  		<property name="cronExpression" value="0/10 * * * * ?"/>
  	</bean>
+ 	
  	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
- 		<!-- 延迟30s启动调度器 -->
+ 		<!-- 延迟10s启动调度器 -->
  		<property name="startupDelay" value="10"/>
  		<property name="taskExecutor" ref="qzTaskExecutor"/>
  		<property name="triggers">
