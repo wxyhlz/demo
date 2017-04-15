@@ -12,8 +12,7 @@
     	分别在类级别和方法级别处理@RequestMapping注解 -->
     <mvc:annotation-driven />
     
-    <context:component-scan base-package="com.wxyh.demo.controller">
-    	<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+    <context:component-scan base-package="com.wxyh.demo.web.controller">
     </context:component-scan>
     
     <!-- 视图解析器 -->
