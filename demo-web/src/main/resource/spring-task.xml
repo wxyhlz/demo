@@ -14,17 +14,6 @@
     <task:scheduler id="jobScheduler" pool-size="5"/>
     <task:executor id="taskExecutor" pool-size="5-10" keep-alive="300" queue-capacity="1000" rejection-policy="CALLER_RUNS"/>
  
- 	<!-- spring task定时任务配置，xml配置方式，便于统一管理任务 -->
- 	<task:scheduled-tasks scheduler="jobScheduler">
- 		<task:scheduled ref="jobExample4SpringTask2" method="execute" cron="0 0 0 * * ?"/>
- 	</task:scheduled-tasks>
- 	
- 	
- 	<bean id="qzJobDetail2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
- 		<property name="jobClass" value="com.wxyh.demo.web.job.JobExample4Quartz"/>
- 		<property name="applicationContextJobDataKey" value="applicationContext"/>
- 	</bean>
- 	
  	<!-- spring+quartz定时任务配置 -->
  	<bean id="qzJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
  		<property name="targetObject" ref="jobExample4Quartz"/>
@@ -54,6 +43,11 @@
  		<property name="rejectedExecutionHandler">
  			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
  		</property>
- 	</bean> 
+ 	</bean>
+ 	
+ 	<!-- <bean id="qzJobDetail2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+ 		<property name="jobClass" value="com.wxyh.demo.web.job.JobExample4Quartz"/>
+ 		<property name="applicationContextJobDataKey" value="applicationContext"/>
+ 	</bean> -->
  
 </beans>
