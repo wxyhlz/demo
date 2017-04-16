@@ -17,9 +17,9 @@
     
     <!-- 视图解析器 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-INF/jsp/"></property>
-        <property name="suffix" value=".jsp"></property>
+    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
     
     <!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -29,8 +29,8 @@
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
     	<property name="exceptionMappings">
     		<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-    			<property name="fileEncoding" value="UTF-8"></property>
-    			<property name="location" value="classpath:config/exceptionMappings.properties"></property>
+    			<property name="fileEncoding" value="UTF-8"/>
+    			<property name="location" value="classpath:config/exceptionMappings.properties"/>
     		</bean>
     	</property>
     	<!-- <property name="defaultErrorView" value="error/500"></property> -->
@@ -40,8 +40,8 @@
     	<bean class="com.wxyh.demo.web.interceptors.MyInterceptor">
     		<property name="configProps">
     			<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-					<property name="fileEncoding" value="UTF-8"></property>
-					<property name="location" value="classpath:config/configProps.properties"></property>
+					<property name="fileEncoding" value="UTF-8"/>
+					<property name="location" value="classpath:config/configProps.properties"/>
 				</bean>
     		</property>
     	</bean>

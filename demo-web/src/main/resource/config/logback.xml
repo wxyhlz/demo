@@ -3,7 +3,7 @@
 	scan：配置文件如果发生改变，将会重新加载，默认值为true。
 	scanPeriod：检测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位时毫秒，当scan为true时，这个属性生效，默认时间间隔为1min。
  -->
-<configuration debug="true" scan="false" scanPeriod="600000">
+<configuration debug="true" scan="false" scanPeriod="1 hour">
 	<!-- 日志上下文名称 -->
 	<contextName>logback</contextName>
 	<!-- 设置参数，通过${paramName}获取参数值 -->
@@ -63,30 +63,28 @@
         </rollingPolicy>
 	</appender>
 	
+	<!--日志异步到数据库 -->
+	<appender name="dbAppender" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+			<driverClass>com.mysql.jdbc.Driver</driverClass>
+			<url>jdbc:mysql://localhost:3306/demo?useUnicode=true&amp;characterEncoding=utf-8</url>
+			<user>root</user>
+			<password>root123</password>
+		</connectionSource>
+	</appender>
+	
 	<logger name="com.wxyh.demo.dao" level="INFO" additivity="false">
 		<appender-ref ref="daoFileAppender"/>
 	</logger>
 	<logger name="com.wxyh.demo.web.job" level="INFO" additivity="false">
 		<appender-ref ref="jobFileAppender"/>
+		<appender-ref ref="dbAppender"/>
 	</logger>
-	
 	
 	<!-- 日志输出级别 -->
 	<root level="INFO">
 		<appender-ref ref="stdOut"/>
 		<appender-ref ref="fileAppender"/>
 	</root>
-	
-	<!--日志异步到数据库 -->
-	<!-- <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
-        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-			<dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource">
-				<driverClass>com.mysql.jdbc.Driver</driverClass>
-				<url>jdbc:mysql://localhost:3306/demo</url>
-				<user>root</user>
-				<password>root123</password>
-			</dataSource>
-		</connectionSource>
-	</appender> -->
 	
 </configuration>

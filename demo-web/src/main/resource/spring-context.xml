@@ -19,12 +19,12 @@
     <!-- 缓存配置START -->
     <!-- 配置EhCache的CacheManager，通过configLocation指定ehcache.xml文件的位置 -->
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-    	<property name="configLocation" value="classpath:config/ehcache.xml"></property>
+    	<property name="configLocation" value="classpath:config/ehcache.xml"/>
     </bean>
     <!-- Spring使用EhCacheCacheManager作为EhCache缓存实现的缓存管理器，
     	但EhCacheCacheManager底层需要依赖一个net.sf.ehcache.CacheManager作为实际的缓存管理器。-->
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-    	<property name="cacheManager" ref="ehCacheManager"></property>
+    	<property name="cacheManager" ref="ehCacheManager"/>
     </bean>
     <!-- 缓存配置END -->
     

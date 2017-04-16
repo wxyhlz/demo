@@ -15,39 +15,39 @@
     <!-- 数据源 -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
     	<property name="driverClassName" value="${jdbc.driverClassName}"></property>
-    	<property name="url" value="${jdbc.url}"></property>
-    	<property name="username" value="${jdbc.username}"></property>
-    	<property name="password" value="${jdbc.password}"></property>
-    	<property name="maxTotal" value="${jdbc.maxTotal}"></property>
-    	<property name="maxIdle" value="${jdbc.maxIdle}"></property>
-    	<property name="minIdle" value="${jdbc.minIdle}"></property>
-    	<property name="initialSize" value="${jdbc.initialSize}"></property>
-    	<property name="maxWaitMillis" value="${jdbc.maxWaitMillis}"></property>
-    	<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"></property>
-    	<property name="defaultReadOnly" value="${jdbc.defaultReadOnly}"></property>
-    	<property name="defaultQueryTimeout" value="${jdbc.defaultQueryTimeout}"></property>
-    	<property name="poolPreparedStatements" value="${jdbc.poolPreparedStatements}"></property>
-    	<property name="testOnBorrow" value="${jdbc.testOnBorrow}"></property>
-    	<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"></property>
-    	<property name="validationQuery" value="${jdbc.validationQuery}"></property>
-    	<property name="validationQueryTimeout" value="${jdbc.validationQueryTimeout}"></property>
+    	<property name="url" value="${jdbc.url}"/>
+    	<property name="username" value="${jdbc.username}"/>
+    	<property name="password" value="${jdbc.password}"/>
+    	<property name="maxTotal" value="${jdbc.maxTotal}"/>
+    	<property name="maxIdle" value="${jdbc.maxIdle}"/>
+    	<property name="minIdle" value="${jdbc.minIdle}"/>
+    	<property name="initialSize" value="${jdbc.initialSize}"/>
+    	<property name="maxWaitMillis" value="${jdbc.maxWaitMillis}"/>
+    	<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"/>
+    	<property name="defaultReadOnly" value="${jdbc.defaultReadOnly}"/>
+    	<property name="defaultQueryTimeout" value="${jdbc.defaultQueryTimeout}"/>
+    	<property name="poolPreparedStatements" value="${jdbc.poolPreparedStatements}"/>
+    	<property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+    	<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+    	<property name="validationQuery" value="${jdbc.validationQuery}"/>
+    	<property name="validationQueryTimeout" value="${jdbc.validationQueryTimeout}"/>
     </bean>
     
     <!-- mybatis配置 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    	<property name="dataSource" ref="dataSource"></property>
-    	<property name="configLocation" value="classpath:config/mybatis-config.xml"></property>
-    	<property name="mapperLocations" value="classpath:com/wxyh/demo/dao/*.xml"></property>
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+    	<property name="mapperLocations" value="classpath:com/wxyh/demo/dao/*.xml"/>
     </bean>
     <!-- spring与mybatis整合配置，扫描所有dao -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.wxyh.demo.dao"></property>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="basePackage" value="com.wxyh.demo.dao"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
 	
 	<!-- 事务配置 START -->
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"></property>
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	<tx:annotation-driven transaction-manager="txManager"/>
 	<tx:advice id="txAdvice" transaction-manager="txManager">
