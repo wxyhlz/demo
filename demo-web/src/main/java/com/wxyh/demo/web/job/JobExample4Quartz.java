@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JobExample4Quartz {
 	
-	private final Logger logger = LoggerFactory.getLogger(JobExample4Quartz.class);
+	private final Logger logger = LoggerFactory.getLogger("com.wxyh.demo.web.job");
 	
 	private final AtomicInteger ai = new AtomicInteger(0);
 	

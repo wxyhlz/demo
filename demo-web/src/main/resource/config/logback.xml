@@ -3,12 +3,17 @@
 	scan：配置文件如果发生改变，将会重新加载，默认值为true。
 	scanPeriod：检测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位时毫秒，当scan为true时，这个属性生效，默认时间间隔为1min。
  -->
-<configuration debug="true" scan="true" scanPeriod="60000">
+<configuration debug="true" scan="false" scanPeriod="600000">
+	<!-- 日志上下文名称 -->
+	<contextName>logback</contextName>
+	<!-- 设置参数，通过${paramName}获取参数值 -->
+	<property name="log.path" value="E:/logs/demo"></property>
+	
 	<appender name="stdOut" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
 		</encoder>
-		<!-- 配置Filter，控制台只打印INFO级别的日志 -->
+		<!-- 日志输出拦截器，控制台只打印INFO级别的日志 -->
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
 			<level>INFO</level>
 			<onMatch>ACCEPT</onMatch>
@@ -16,22 +21,55 @@
 		</filter>
 	</appender>
 	
-	<!-- 按照每天生成日志文件。日志文件滚动策略，设置日志文件名称，日志文件最多保存30天。
-	 	  日志文件大小超高20M（默认10M），触发滚动策略。 -->
-    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<!-- 文件日志Appender。可以配置日志文件的名称、日志的输出格式、滚动策略等。
+		滚动策略：配置日志文件名称，最多可以保持多少个历史日志文件。当文件大小超过配置大小时，触发滚动策略。
+	 	  如：日志文件大小超过20M（默认10M），触发滚动策略。 -->
+    <appender name="daoFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<append>true</append>
-		<file>e:/logs/demo/demo.log</file>
+		<file>${log.path}/dao.log</file>
         <encoder>
 			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
 		</encoder>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>e:/logs/demo/demo.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/dao.%d{yyyyMMddHH}.%i.log.zip</fileNamePattern>
             <maxHistory>30</maxHistory>
-        </rollingPolicy>
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<maxFileSize>20MB</maxFileSize>
-		</triggeringPolicy>
+        </rollingPolicy>
 	</appender>
+	
+	<appender name="jobFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<file>${log.path}/job.log</file>
+        <encoder>
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/job.%d{yyyyMMddHH}.%i.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+			<maxFileSize>20MB</maxFileSize>
+        </rollingPolicy>
+	</appender>
+	
+	<appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<file>${log.path}/demo.log</file>
+        <encoder>
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/demo.%d{yyyyMMddHH}.%i.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+			<maxFileSize>20MB</maxFileSize>
+        </rollingPolicy>
+	</appender>
+	
+	<logger name="com.wxyh.demo.dao" level="INFO" additivity="false">
+		<appender-ref ref="daoFileAppender"/>
+	</logger>
+	<logger name="com.wxyh.demo.web.job" level="INFO" additivity="false">
+		<appender-ref ref="jobFileAppender"/>
+	</logger>
+	
 	
 	<!-- 日志输出级别 -->
 	<root level="INFO">
