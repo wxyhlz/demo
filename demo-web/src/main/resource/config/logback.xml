@@ -73,6 +73,7 @@
 		</connectionSource>
 	</appender>
 	
+	<!-- 不同包下的日志放在不同的文件中 -->
 	<logger name="com.wxyh.demo.dao" level="INFO" additivity="false">
 		<appender-ref ref="daoFileAppender"/>
 	</logger>
