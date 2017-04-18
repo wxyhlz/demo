@@ -14,7 +14,7 @@ public class JobExample4SpringTask {
 	
 	private final AtomicInteger ai = new AtomicInteger(0);
 	
-	@Scheduled(cron = "0/5 * * * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void execute() {
 		int execBath = ai.incrementAndGet();
 		logger.debug("执行JobExample4SpringTask, 批次={}", execBath);
