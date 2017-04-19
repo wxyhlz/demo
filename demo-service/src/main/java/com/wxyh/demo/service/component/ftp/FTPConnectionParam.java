@@ -1,6 +1,6 @@
 package com.wxyh.demo.service.component.ftp;
 
-public class FTPClientConfig {
+public class FTPConnectionParam {
 
 	private String hostname;
 	
@@ -9,6 +9,8 @@ public class FTPClientConfig {
 	private String username;
 	
 	private String password;
+	
+	private int connectTimeout;
 	
 	private int bufferSize;
 
@@ -42,6 +44,14 @@ public class FTPClientConfig {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getConnectTimeout() {
+		return connectTimeout;
+	}
+
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
 	}
 
 	public int getBufferSize() {

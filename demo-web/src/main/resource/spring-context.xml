@@ -29,7 +29,7 @@
     <!-- 缓存配置END -->
     
     <bean id="ftpClientService" class="com.wxyh.demo.service.component.ftp.FTPClientService">
-    	<property name="configLocation" value="classpath:config/ftp.properties"/>
+    	<property name="location" value="classpath:config/ftp.properties"/>
     </bean>
     
 </beans>

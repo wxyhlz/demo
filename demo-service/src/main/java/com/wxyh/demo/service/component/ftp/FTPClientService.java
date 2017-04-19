@@ -24,23 +24,21 @@ public class FTPClientService implements InitializingBean {
 	private static final int DEFAULT_CONNECT_TIMEOUT = 10000;
 	private static final int DEFAULT_BUF_SIZE = 2048;
 	
-	private Resource configLocation;
+	private Resource location;
 	
 	private final Properties props = new Properties();
 
-	public void setConfigLocation(Resource configLocation) {
-		this.configLocation = configLocation;
+	public void setLocation(Resource location) {
+		this.location = location;
 	}
 
 	public FTPClient createFTPClient() throws IOException {
 		FTPClient ftpClient = new FTPClient();
-		int port = NumberUtils.toInt(props.getProperty("ftp.port"), FTPClient.DEFAULT_PORT);
-		int bufSize = NumberUtils.toInt(props.getProperty("ftp.bufSize"), DEFAULT_BUF_SIZE);
-		int connectTimeout = NumberUtils.toInt(props.getProperty("ftp.connectTimeout"), DEFAULT_CONNECT_TIMEOUT);
-		ftpClient.connect(props.getProperty("ftp.hostname"), port);
+		ftpClient.connect(props.getProperty("ftp.hostname"), 
+				getPropValueAsInt("ftp.port", FTPClient.DEFAULT_PORT));
 		ftpClient.login(props.getProperty("ftp.username"), props.getProperty("ftp.password"));
-		ftpClient.setConnectTimeout(connectTimeout);
-		ftpClient.setBufferSize(bufSize);
+		ftpClient.setConnectTimeout(getPropValueAsInt("ftp.connectTimeout", DEFAULT_CONNECT_TIMEOUT));
+		ftpClient.setBufferSize(getPropValueAsInt("ftp.bufSize", DEFAULT_BUF_SIZE));
 		ftpClient.setControlEncoding("UTF-8");
 		ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 		return ftpClient;
@@ -56,13 +54,22 @@ public class FTPClientService implements InitializingBean {
 		}
 	}
 	
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(configLocation, "Resource [configLocation] cannot be null!");
-		PropertiesLoaderUtils.fillProperties(props, configLocation);
+	private int getPropValueAsInt(String key, int defaultValue) {
+		return NumberUtils.toInt(props.getProperty(key), FTPClient.DEFAULT_PORT);
 	}
 	
+	@Override
+	public void afterPropertiesSet() throws IOException {
+		Assert.notNull(location, "Resource [location] cannot be null!");
+		PropertiesLoaderUtils.fillProperties(props, location);
+	}
+	
+	/**
+	 * 上传excel文件至ftp服务器
+	 * @param remoteFilePath
+	 * @param workbook
+	 * @throws IOException
+	 */
 	public void uploadExportExcel(String remoteFilePath, Workbook workbook) throws IOException {
 		Assert.notNull(workbook, "Workbook [workbook] cannot be null.");
 		FTPClient ftpClient = createFTPClient();
@@ -86,6 +93,33 @@ public class FTPClientService implements InitializingBean {
 		}
 	}
 	
+	/**
+	 * 获取ftp服务器上文件的输出流，可用于直接把数据写入ftp服务器上的文件中
+	 * @param remoteFilePath ftp文件路径
+	 * @return
+	 * @throws IOException
+	 */
+	public OutputStream getStoreFileStream(String remoteFilePath) throws IOException {
+		FTPClient ftpClient = createFTPClient();
+		OutputStream out = null;
+		try {
+			ftpClient.changeWorkingDirectory("/");
+			String remote = encodingPath(remoteFilePath);
+			out = ftpClient.storeFileStream(remote);
+			ftpClient.completePendingCommand();
+			return out;
+		}
+		finally {
+			closeFtpClient(ftpClient);
+		}
+	}
+	
+	/**
+	 * 获取ftp服务器上文件的输入流，可用于直接读取ftp服务器上的文件
+	 * @param remoteFilePath ftp文件路径
+	 * @return
+	 * @throws IOException
+	 */
 	public InputStream getRemoteFileStream(String remoteFilePath) throws IOException {
 		FTPClient ftpClient = createFTPClient();
 		ftpClient.changeWorkingDirectory("/");
