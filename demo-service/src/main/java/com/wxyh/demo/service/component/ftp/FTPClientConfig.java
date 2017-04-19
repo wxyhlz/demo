@@ -1,6 +1,6 @@
 package com.wxyh.demo.service.component.ftp;
 
-public class FTPClientConfigParam {
+public class FTPClientConfig {
 
 	private String hostname;
 	
