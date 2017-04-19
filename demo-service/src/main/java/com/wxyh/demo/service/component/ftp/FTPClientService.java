@@ -32,7 +32,7 @@ public class FTPClientService implements InitializingBean {
 		this.location = location;
 	}
 
-	public FTPClient createFTPClient() throws IOException {
+	private FTPClient createFTPClient() throws IOException {
 		FTPClient ftpClient = new FTPClient();
 		ftpClient.connect(props.getProperty("ftp.hostname"), 
 				getPropValueAsInt("ftp.port", FTPClient.DEFAULT_PORT));
@@ -44,7 +44,7 @@ public class FTPClientService implements InitializingBean {
 		return ftpClient;
 	}
 
-	public void closeFtpClient(FTPClient ftpClient) {
+	private void closeFtpClient(FTPClient ftpClient) {
 		if (ftpClient != null && ftpClient.isConnected()) {
 			try {
 				ftpClient.disconnect();
