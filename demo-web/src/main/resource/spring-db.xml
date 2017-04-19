@@ -10,7 +10,7 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     
-    <context:property-placeholder location="classpath:config/jdbc.properties"/>
+    <context:property-placeholder location="classpath:config/jdbc.properties" file-encoding="utf-8"/>
     
     <!-- 数据源 -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">

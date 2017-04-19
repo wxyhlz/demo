@@ -33,7 +33,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletRequestDataB
 import org.springframework.web.servlet.support.RequestContextUtils;
 /**
  * 自定义拦截器
- * @author liuzhe
+ * @author wxyh
+ * 
  *
  */
 @SuppressWarnings("deprecation")

@@ -14,6 +14,8 @@
     	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     
+    <context:property-placeholder location="classpath:config/ftp.properties" file-encoding="utf-8"/>
+    
     <cache:annotation-driven cache-manager="cacheManager"/>
     
     <!-- 缓存配置START -->
@@ -27,5 +29,17 @@
     	<property name="cacheManager" ref="ehCacheManager"/>
     </bean>
     <!-- 缓存配置END -->
+    
+    <bean id="ftpClientService" class="com.wxyh.demo.service.component.ftp.FTPClientService">
+    	<property name="ftpClientConfigParam">
+    		<bean class="com.wxyh.demo.service.component.ftp.FTPClientConfigParam">
+    			<property name="hostname" value="${ftp.hostname}"/>
+    			<property name="port" value="${ftp.port}"/>
+    			<property name="username" value="${ftp.username}"/>
+    			<property name="password" value="${ftp.password}"/>
+    			<property name="bufferSize" value="${ftp.bufferSize}"/>
+    		</bean>
+    	</property>
+    </bean>
     
 </beans>
