@@ -3,7 +3,7 @@
 	scan：配置文件如果发生改变，将会重新加载，默认值为true。
 	scanPeriod：检测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位时毫秒，当scan为true时，这个属性生效，默认时间间隔为1min。
  -->
-<configuration debug="true" scan="false" scanPeriod="1 hour">
+<configuration debug="false" scan="false" scanPeriod="1 hour">
 	<!-- 日志上下文名称 -->
 	<contextName>logback</contextName>
 	<!-- 设置参数，通过${paramName}获取参数值 -->

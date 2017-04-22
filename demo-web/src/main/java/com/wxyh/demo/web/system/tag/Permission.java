@@ -5,7 +5,11 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-
+/**
+ * 权限标签类
+ * @author wxyh
+ *
+ */
 public class Permission extends SimpleTagSupport {
 	
 	/**

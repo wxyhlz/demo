@@ -12,17 +12,23 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.Assert;
 
-public class FTPClientService implements InitializingBean {
+/**
+ * FTP服务类
+ * @author wxyh
+ *
+ */
+public class FtpClientService {
 
-	private final Logger logger = LoggerFactory.getLogger(FTPClientService.class);
+	private final Logger logger = LoggerFactory.getLogger(FtpClientService.class);
 	
 	private static final int DEFAULT_CONNECT_TIMEOUT = 10000;
 	private static final int DEFAULT_BUF_SIZE = 2048;
+	
+	private static ThreadLocal<FTPClient> ftpClientTL = new ThreadLocal<FTPClient>();
 	
 	private Resource location;
 	
@@ -31,20 +37,31 @@ public class FTPClientService implements InitializingBean {
 	public void setLocation(Resource location) {
 		this.location = location;
 	}
+	
+	/**
+	 * bean初始化方法
+	 * @throws IOException
+	 */
+	public void init() throws IOException {
+		Assert.notNull(this.location, "Resource [location] must not be null!");
+		PropertiesLoaderUtils.fillProperties(this.props, this.location);
+	}
 
-	private FTPClient createFTPClient() throws IOException {
+	private FTPClient createFtpClient() throws IOException {
 		FTPClient ftpClient = new FTPClient();
 		ftpClient.connect(props.getProperty("ftp.hostname"), 
-				getPropValueAsInt("ftp.port", FTPClient.DEFAULT_PORT));
+				getIntPropValue("ftp.port", FTPClient.DEFAULT_PORT));
 		ftpClient.login(props.getProperty("ftp.username"), props.getProperty("ftp.password"));
-		ftpClient.setConnectTimeout(getPropValueAsInt("ftp.connectTimeout", DEFAULT_CONNECT_TIMEOUT));
-		ftpClient.setBufferSize(getPropValueAsInt("ftp.bufSize", DEFAULT_BUF_SIZE));
+		ftpClient.setConnectTimeout(getIntPropValue("ftp.connectTimeout", DEFAULT_CONNECT_TIMEOUT));
+		ftpClient.setBufferSize(getIntPropValue("ftp.bufSize", DEFAULT_BUF_SIZE));
 		ftpClient.setControlEncoding("UTF-8");
 		ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 		return ftpClient;
 	}
 
-	private void closeFtpClient(FTPClient ftpClient) {
+	@SuppressWarnings("unused")
+	private void closeFtpClient() {
+		FTPClient ftpClient = ftpClientTL.get();
 		if (ftpClient != null && ftpClient.isConnected()) {
 			try {
 				ftpClient.disconnect();
@@ -54,14 +71,17 @@ public class FTPClientService implements InitializingBean {
 		}
 	}
 	
-	private int getPropValueAsInt(String key, int defaultValue) {
-		return NumberUtils.toInt(props.getProperty(key), FTPClient.DEFAULT_PORT);
+	public FTPClient getFtpClient() throws IOException {
+		FTPClient ftpClient = ftpClientTL.get();
+		if (ftpClient == null || !ftpClient.isConnected()) {
+			ftpClient = createFtpClient();
+			ftpClientTL.set(ftpClient);
+		}
+		return ftpClient;
 	}
 	
-	@Override
-	public void afterPropertiesSet() throws IOException {
-		Assert.notNull(location, "Resource [location] cannot be null!");
-		PropertiesLoaderUtils.fillProperties(props, location);
+	private int getIntPropValue(String key, int defaultValue) {
+		return NumberUtils.toInt(props.getProperty(key), FTPClient.DEFAULT_PORT);
 	}
 	
 	/**
@@ -72,7 +92,7 @@ public class FTPClientService implements InitializingBean {
 	 */
 	public void uploadExportExcel(String remoteFilePath, Workbook workbook) throws IOException {
 		Assert.notNull(workbook, "Workbook [workbook] cannot be null.");
-		FTPClient ftpClient = createFTPClient();
+		FTPClient ftpClient = getFtpClient();
 		OutputStream out = null;
 		try {
 			ftpClient.changeWorkingDirectory("/");
@@ -89,7 +109,6 @@ public class FTPClientService implements InitializingBean {
 				catch (IOException e) {
 				}
 			}
-			closeFtpClient(ftpClient);
 		}
 	}
 	
@@ -100,18 +119,11 @@ public class FTPClientService implements InitializingBean {
 	 * @throws IOException
 	 */
 	public OutputStream getStoreFileStream(String remoteFilePath) throws IOException {
-		FTPClient ftpClient = createFTPClient();
-		OutputStream out = null;
-		try {
-			ftpClient.changeWorkingDirectory("/");
-			String remote = encodingPath(remoteFilePath);
-			out = ftpClient.storeFileStream(remote);
-			ftpClient.completePendingCommand();
-			return out;
-		}
-		finally {
-			closeFtpClient(ftpClient);
-		}
+		FTPClient ftpClient = getFtpClient();
+		ftpClient.changeWorkingDirectory("/");
+		OutputStream out = ftpClient.storeFileStream(encodingPath(remoteFilePath));
+		ftpClient.completePendingCommand();
+		return out;
 	}
 	
 	/**
@@ -121,10 +133,9 @@ public class FTPClientService implements InitializingBean {
 	 * @throws IOException
 	 */
 	public InputStream getRemoteFileStream(String remoteFilePath) throws IOException {
-		FTPClient ftpClient = createFTPClient();
+		FTPClient ftpClient = getFtpClient();
 		ftpClient.changeWorkingDirectory("/");
-		String remote = encodingPath(remoteFilePath);
-		InputStream in = ftpClient.retrieveFileStream(remote);
+		InputStream in = ftpClient.retrieveFileStream(encodingPath(remoteFilePath));
 		ftpClient.completePendingCommand();
 		return in;
 	}
