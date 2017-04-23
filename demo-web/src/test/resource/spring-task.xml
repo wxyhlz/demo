@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    
+    <!-- 开启spring定时任务和异步任务的注解配置功能。taskExecutor：执行异步任务的线程池，是一个ThreadPoolTaskExecutor类型的实例；
+    	jobScheduler：定时任务调度器，是一个ThreadPoolTaskScheduler类型的实例，pool-size配置执行定时任务线程池的核心线程数。 -->
+    <task:annotation-driven scheduler="jobScheduler" executor="taskExecutor"/>
+    <task:scheduler id="jobScheduler" pool-size="5"/>
+    <task:executor id="taskExecutor" pool-size="5-10" keep-alive="300" queue-capacity="1000" rejection-policy="CALLER_RUNS"/>
+ 
+ 	<!-- spring+quartz定时任务配置 -->
+ 	<bean id="qzJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+ 		<property name="targetObject" ref="jobExample4Quartz"/>
+ 		<property name="targetMethod" value="execute"/>
+ 		<property name="concurrent" value="false"/>
+ 	</bean>
+ 	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+ 		<property name="jobDetail" ref="qzJobDetail"/>
+ 		<property name="cronExpression" value="0 * * * * ?"/>
+ 	</bean>
+ 	
+ 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+ 		<!-- 延迟10s启动调度器 -->
+ 		<property name="startupDelay" value="10"/>
+ 		<property name="taskExecutor" ref="qzTaskExecutor"/>
+ 		<property name="triggers">
+ 			<list>
+ 				<ref bean="cronTrigger"/>
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean id="qzTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+ 		<property name="corePoolSize" value="5"/>
+ 		<property name="maxPoolSize" value="10"/>
+ 		<property name="keepAliveSeconds" value="300"/>
+ 		<property name="rejectedExecutionHandler">
+ 			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+ 		</property>
+ 	</bean>
+ 	
+ 	<!-- <bean id="qzJobDetail2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+ 		<property name="jobClass" value="com.wxyh.demo.web.job.JobExample4Quartz"/>
+ 		<property name="applicationContextJobDataKey" value="applicationContext"/>
+ 	</bean> -->
+ 
+</beans>
