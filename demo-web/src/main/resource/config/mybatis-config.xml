@@ -3,6 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
   "http://mybatis.org/dtd/mybatis-3-config.dtd">  
 <configuration>
+	<settings>
+		<setting name="autoMappingBehavior" value="PARTIAL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="logImpl" value="SLF4J"/>
+	</settings>
     <!-- 对事务的管理和连接池的配置 -->  
     <!-- <environments default="development">
         <environment id="development">
