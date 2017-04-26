@@ -44,10 +44,5 @@
  			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
  		</property>
  	</bean>
- 	
- 	<!-- <bean id="qzJobDetail2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
- 		<property name="jobClass" value="com.wxyh.demo.web.job.JobExample4Quartz"/>
- 		<property name="applicationContextJobDataKey" value="applicationContext"/>
- 	</bean> -->
  
 </beans>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+ 	<!-- 调度器配置 -->
+ 	<bean name="stdScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+ 		<!-- 延迟10s启动调度器 -->
+ 		<property name="startupDelay" value="10"/>
+ 		<property name="configLocation" value="classpath:config/quartz.properties"/>
+ 		<property name="taskExecutor" ref="qzTaskExecutor"/>
+ 		<property name="triggers">
+ 			<list>
+ 				<ref bean="quartzJobExampleTrigger"/>
+ 				<ref bean="quartzJobExampleTrigger2"/>
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean id="qzTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+ 		<property name="corePoolSize" value="5"/>
+ 		<property name="maxPoolSize" value="10"/>
+ 		<property name="keepAliveSeconds" value="300"/>
+ 		<property name="rejectedExecutionHandler">
+ 			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean name="quartzJobExample" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+ 		<property name="durability" value="true"/>
+ 		<property name="requestsRecovery" value="true"/>
+ 		<property name="group" value="default"/>
+ 		<property name="jobClass" value="com.shein.ims.job.example.QuartzJobExample"/>
+ 		<property name="description" value="QuartzJobExample"/>
+ 	</bean>
+ 	<bean name="quartzJobExampleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+ 		<property name="group" value="default"/>
+ 		<property name="jobDetail" ref="quartzJobExample"/>
+ 		<property name="cronExpression" value="0 * * * * ?"/>
+ 	</bean>
+ 	
+ 	<bean name="quartzJobExample2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+ 		<property name="durability" value="true"/>
+ 		<property name="requestsRecovery" value="true"/>
+ 		<property name="group" value="default"/>
+ 		<property name="jobClass" value="com.shein.ims.job.example.QuartzJobExample2"/>
+ 		<!-- <property name="applicationContextJobDataKey" value="applicationContext"/> -->
+ 		<property name="description" value="QuartzJobExample2"/>
+ 	</bean>
+ 	<bean name="quartzJobExampleTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+ 		<property name="group" value="default"/>
+ 		<property name="jobDetail" ref="quartzJobExample2"/>
+ 		<property name="cronExpression" value="20 * * * * ?"/>
+ 	</bean>
+ 
+</beans>
