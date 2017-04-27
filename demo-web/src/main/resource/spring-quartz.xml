@@ -2,17 +2,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:context="http://www.springframework.org/schema/context" 
-	xmlns:task="http://www.springframework.org/schema/task" 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     
  	<!-- 调度器配置 -->
- 	<bean name="stdScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+ 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
  		<!-- 延迟10s启动调度器 -->
  		<property name="startupDelay" value="10"/>
+ 		<property name="autoStartup" value="true"/>
+ 		<property name="schedulerName" value="stdScheduler"/>
  		<property name="configLocation" value="classpath:config/quartz.properties"/>
  		<property name="taskExecutor" ref="qzTaskExecutor"/>
+ 		<property name="overwriteExistingJobs" value="true"/>
+ 		<property name="waitForJobsToCompleteOnShutdown" value="true"/>
+ 		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
  		<property name="triggers">
  			<list>
  				<ref bean="quartzJobExampleTrigger"/>
@@ -34,7 +38,7 @@
  		<property name="durability" value="true"/>
  		<property name="requestsRecovery" value="true"/>
  		<property name="group" value="default"/>
- 		<property name="jobClass" value="com.shein.ims.job.example.QuartzJobExample"/>
+ 		<property name="jobClass" value="com.wxyh.demo.web.job.QuartzJobExample"/>
  		<property name="description" value="QuartzJobExample"/>
  	</bean>
  	<bean name="quartzJobExampleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -47,14 +51,13 @@
  		<property name="durability" value="true"/>
  		<property name="requestsRecovery" value="true"/>
  		<property name="group" value="default"/>
- 		<property name="jobClass" value="com.shein.ims.job.example.QuartzJobExample2"/>
- 		<!-- <property name="applicationContextJobDataKey" value="applicationContext"/> -->
+ 		<property name="jobClass" value="com.wxyh.demo.web.job.QuartzJobExample2"/>
  		<property name="description" value="QuartzJobExample2"/>
  	</bean>
  	<bean name="quartzJobExampleTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
  		<property name="group" value="default"/>
  		<property name="jobDetail" ref="quartzJobExample2"/>
- 		<property name="cronExpression" value="20 * * * * ?"/>
+ 		<property name="cronExpression" value="30 * * * * ?"/>
  	</bean>
  
 </beans>
